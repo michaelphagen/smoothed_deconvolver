@@ -88,14 +88,12 @@ end
     
 %if neither file is stereo    
 if stereoIR == 0 && stereoAudio == 0
-    disp('neither file is stereo   ')
     %process the mono audio with the one IR
     deconvAudio=mph354_deconvolution(audio,IR,smoothing);
 end
 
 %if the impulse response is stereo but the audio is mono
 if stereoIR == 1 && stereoAudio == 0
-    disp('the impulse response is stereo but the audio is mono')
     %process the mono audio to both Impulses
     deconvAudioL=mph354_deconvolution(audio,IR(:,1),smoothing);
     deconvAudioR=mph354_deconvolution(audio,IR(:,2),smoothing);
@@ -106,7 +104,6 @@ end
 
 %if the impulse response is mono but the audio is stereo
 if stereoIR == 0 && stereoAudio == 1
-    disp('impulse response is mono but the audio is stereo')
     %process each channel of stereo audio to the IR
     deconvAudioL=mph354_deconvolution(audio(:,1),IR,smoothing);
     deconvAudioR=mph354_deconvolution(audio(:,2),IR,smoothing);
@@ -117,7 +114,6 @@ end
 
 %if the impulse response is stereo and the audio is stereo
 if stereoIR == 1 && stereoAudio == 1
-    disp('the impulse response is stereo and the audio is stereo')
     %process the each channel of stereo audio to the corresponding IR
     deconvAudioL=mph354_deconvolution(audio(:,1),IR(:,1),smoothing);
     deconvAudioR=mph354_deconvolution(audio(:,2),IR(:,2),smoothing);
@@ -128,10 +124,6 @@ end
 
 %write the returned, deconvolved audio to disk using the global sample rate
 %and the filename specifed at the begining.
-maxamp=max(max(abs(deconvAudio)));
-disp(maxamp);
-disp(size(deconvAudio));
-deconvAudio(:,1)= deconvAudio(:,1) / maxamp;  
-deconvAudio(:,2)= deconvAudio(:,2) / maxamp;  
+deconvAudio= deconvAudio / max(abs(deconvAudio));  
 audiowrite(filename,deconvAudio,fs);
 return

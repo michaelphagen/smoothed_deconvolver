@@ -36,5 +36,5 @@ out=ifft(OUT);
 %take the real output of the time domain signal.
 out=real(out);
 %normalize the output
-out= out / abs(max(out))
+out= out / abs(max(out));
 return
